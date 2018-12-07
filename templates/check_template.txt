@@ -1,0 +1,16 @@
+{#- 输入参数num(str), v(list)[qemu情况,[fixed_id情况],[相关文件情况]] -#}
+{{ num }}云主机自身健康检查
+    云主机的qemu是否存在:         {{ v[0] }}
+    云主机fixed_ip情况
+        {%- for oneip in v[1] %}
+        fixed_ip:                 {{ oneip[0] }}
+        存在否:                   {{ oneip[1] }}
+		{%- endfor %}
+    相关文件存在情况
+        cosole.log:               {{ v[2][0] }}
+        disk.config:              {{ v[2][1] }}
+        disk:                     {{ v[2][2] }}
+        disk.info:                {{ v[2][3] }}
+        libvirt.xml:              {{ v[2][4] }}
+        backing_file:             {{ v[2][5] }}
+

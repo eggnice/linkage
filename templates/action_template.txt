@@ -1,0 +1,17 @@
+{#- 输入参数:num(str),v(list)[[一条操作记录信息],] -#}
+{{ num }}云主机操作信息
+    {%- if v[0] == 'None' -%}
+        {%- set L = 0 -%}
+    {%- else -%}
+        {%- set L = v | length -%}
+    {%- endif %}
+    云主机操作记录条数:           {{ L }}
+    {%- if L -%}
+        {%- for oner in v %}
+    请求ID:                       {{ oner[0] }}          
+        请求动作:                 {{ oner[1] }}
+        请求时间:                 {{ oner[2] }}
+        请求信息:                 {{ oner[3] }}
+        {%- endfor %}
+    {%- endif %}
+

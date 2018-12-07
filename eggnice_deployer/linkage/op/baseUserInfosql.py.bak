@@ -1,0 +1,78 @@
+#! /usr/bin/env python
+# _*_ coding:utf-8 _*_
+
+# bcop sql query
+
+from linkage.utils import utils
+from linkage import opconfig
+
+
+class Getuserinfo(object):
+
+    def __init__(self, _argument):
+        self.username = _argument
+        self.mobile = _argument
+        self.email = _argument
+        self.customerid = _argument
+
+    def getuserinfo_username(self):
+        """get user information according to user_name"""
+
+        usersql = """ select u.id user_id,u.user_name,u.email,u.phone,case u.IS_CUSTOMER when 0 then '用户' when 1
+            then '客户' end 'is_customer',u.LOGIN_FAILED_COUNT,u.create_time,c.id customer_id,c.boss_cust_id,case
+            c.cust_status WHEN 1 THEN '正常' WHEN 2 THEN '暂停' WHEN 3 THEN '待审批' WHEN 4 THEN '审批未通过'
+            WHEN 5 THEN '欠费' WHEN 6 THEN '已注销' WHEN 7 THEN '等待删除' WHEN 11 THEN '注册待归档' WHEN 12
+            THEN '待基础产品订单同步' WHEN 13 THEN '待基础产品反馈' ELSE 'undefined' END AS 'CUST_STATUS',
+            case c.REG_SOURCE when 0 then 'OP平台' when 1 then 'bboss' when 2 then '政企boss' when 3 then 'SaaS来源'
+            end as 'reg_source', case c.is_huawei WHEN 0 THEN '不是华为客户' WHEN 1 THEN '华为客户' WHEN 2 THEN
+            '华为无订单老客户' ELSE 'undefied' END as 'IS_HUAWEI',c.boss_pro_order_code,c.global_discount,case
+            c.payment_type WHEN 1 THEN '预付费' WHEN 2 THEN '后付费' end as 'payment_type',c.contactor ,
+            c.mng_phone from opm_user_user u left join opm_customer c on u.customer_id = c.id
+            where u.user_name like "%s" """ % self.username.encode('utf-8')
+        return utils.execsql(usersql, opconfig['OP_CLOUDMASTER_CONFIG'])
+
+    def getuserinfo_mobiles(self):
+        """get user information according to mobile"""
+        usersql = """ select u.id user_id,u.user_name,u.email,u.phone,case u.IS_CUSTOMER when 0 then '用户' when
+            1 then '客户' end 'is_customer',u.LOGIN_FAILED_COUNT,u.create_time,c.id customer_id,c.boss_cust_id,
+            case c.cust_status WHEN 1 THEN '正常' WHEN 2 THEN '暂停' WHEN 3 THEN '待审批' WHEN 4 THEN '审批未通过'
+            WHEN 5 THEN '欠费' WHEN 6 THEN '已注销' WHEN 7 THEN '等待删除' WHEN 11 THEN '注册待归档' WHEN 12 THEN
+            '待基础产品订单同步' WHEN 13 THEN '待基础产品反馈' ELSE 'undefined' END AS 'CUST_STATUS',case c.REG_SOURCE
+            when 0 then 'OP平台' when 1 then 'bboss' when 2 then '政企boss' when 3 then 'SaaS来源'end as 'reg_source',
+            case c.is_huawei WHEN 0 THEN '不是华为>客户' WHEN 1 THEN '华为客户' WHEN 2 THEN '华为无订单老客户' ELSE
+            'undefied' END as 'IS_HUAWEI',c.boss_pro_order_code,c.global_discount,case c.payment_type when 1 then '预付费'
+            when 2 then '后付费' end as 'payment_type' ，c.contactor ,c.mng_phone
+            from opm_user_user  u left join opm_customer c on u.customer_id = c.id  where u.phone = "%s"
+            """ % self.mobile.encode('utf-8')
+        return utils.execsql(usersql, opconfig['OP_CLOUDMASTER_CONFIG'])
+
+    def getuserinfo_email(self):
+        """get user information according to email"""
+        usersql = """ select u.id user_id,u.user_name,u.email,u.phone,case u.IS_CUSTOMER when 0 then '用户' when 1
+            then '客户' end 'is_customer',u.LOGIN_FAILED_COUNT,u.create_time,c.id customer_id,c.boss_cust_id,case
+            c.cust_status WHEN 1 THEN '正常' WHEN 2 THEN '暂停' WHEN 3 THEN '待审批' WHEN 4 THEN '审批未通过' WHEN 5
+            THEN '欠费' WHEN 6 THEN '已注销' WHEN 7 THEN '等待删除' WHEN 11 THEN '注册待归档' WHEN 12 THEN
+            '待基础产品订单同步' WHEN 13 THEN '待基础产品反馈' ELSE 'undefined' END AS 'CUST_STATUS',case
+            c.REG_SOURCE when 0 then 'OP平台' when 1 then 'bboss' when 2 then '政企boss' when 3 then 'SaaS来源'end
+            as 'reg_source', case c.is_huawei WHEN 0 THEN '不是华为>客户' WHEN 1 THEN '华为客户' WHEN 2 THEN
+            '华为无订单老客户' ELSE 'undefied' END as 'IS_HUAWEI',c.boss_pro_order_code,c.global_discount,
+            case c.payment_type when 1 then '预付费' when 2 then '后付费' end as 'payment_type' , c.contactor ,
+            c.mng_phone  from opm_user_user u left join opm_customer c on u.customer_id = c.id
+            where u.email = "%s" """ % self.email.encode('utf-8')
+        return utils.execsql(usersql, opconfig['OP_CLOUDMASTER_CONFIG'])
+
+    def getuserinfo_id(self):
+        """get user information according to customer_id"""
+        usersql = """ select u.id user_id,u.user_name,u.email,u.phone,case u.IS_CUSTOMER when 0 then '用户' when 1
+            then '客户' end 'is_customer',u.LOGIN_FAILED_COUNT,u.create_time,c.id customer_id,c.boss_cust_id,case
+            c.cust_status WHEN 1 THEN '正常' WHEN 2 THEN '暂停' WHEN 3 THEN '待审批' WHEN 4 THEN '审批未通过' WHEN
+            5 THEN '欠费' WHEN 6 THEN '已注销' WHEN 7 THEN '等待删除' WHEN 11 THEN '注册待归档' WHEN 12 THEN
+            '待基础产品订单同步' WHEN 13 THEN '待基础产品反馈' ELSE 'undefined' END AS 'CUST_STATUS',case c.REG_SOURCE
+            when 0 then 'OP平台' when 1 then 'bboss' when 2 then '政企boss' when 3 then 'SaaS来源'end as 'reg_source',
+            case c.is_huawei WHEN 0 THEN '不是华为客户' WHEN 1 THEN '华为客户' WHEN 2 THEN '华为无订单老客户' ELSE
+            'undefied' END as 'IS_HUAWEI',c.boss_pro_order_code,c.global_discount,case c.payment_type when 1 then
+            '预付费' when 2 then '后付费' end as 'payment_type' , c.contactor ,c.mng_phone
+            from opm_user_user u left join opm_customer c on u.customer_id = c.id  where c.id = "%s"
+            """ % self.customerid.encode('utf-8')
+
+        return utils.execsql(usersql, opconfig['OP_CLOUDMASTER_CONFIG'])

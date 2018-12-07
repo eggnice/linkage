@@ -1,0 +1,46 @@
+{#- 注释:输入参数: num:str, v:list[[第一个网卡信息[公网信息][安全组信息[安全组规则信息],]],]
+    当绑定公网为空时公网信息的list第一个参数应该为['None'],安全组和规则同理 -#}
+{{ num }}云主机网路信息
+    {%- if v[0] == 'None' -%}
+        {%- set L = 0 -%}
+    {%- else -%}
+        {%- set L = v | length -%}
+    {%- endif %}
+    云主机网卡数量:               {{ L }}  
+    {%- if L -%}
+    {%- for c in v %}
+    网卡ID:                       {{ c[0] }}
+        网卡IP:                   {{ c[1] }}
+        网卡CIDR:                 {{ c[2] }}
+        网卡是否封堵:             {{ c[3] }}  
+        网卡子网ID:               {{ c[4] }}
+        网卡子网名:               {{ c[5] }}
+        网卡绑定公网ID:           {{ c[6][0] }}
+            {%- if c[6] | length>1 %}
+            公网IP:               {{ c[6][1] }}
+            公网状态:             {{ c[6][2] }}
+            公网类型：            {{ c[6][3] }}
+            公网带宽:             {{ c[6][4] }}
+            公网路由ID:           {{ c[6][5] }} 
+            公网PORT_ID:          {{ c[6][6] }}
+            公网NETWORK_ID:       {{ c[6][7] }} 
+            {%- endif %}
+        {%- for onesec in c[7] %}
+        网卡绑定安全组ID:         {{ onesec[0] }}
+            {%- if onesec | length>1 %}
+            安全组名:             {{ onesec[1] }}
+            {%- for onerule in onesec[2] %}
+            安全组绑定规则ID:     {{ onerule[0] }}
+                {%- if onerule | length>1 %} 
+                流向:             {{ onerule[1] }}
+                协议：            {{ onerule[2] }}
+                端口或范围：      {{ onerule[3] }}
+                CIDRIP:           {{ onerule[4] }}
+                以太网类型:       {{ onerule[5] }} 
+                {%- endif %}
+            {%- endfor %}
+            {%- endif %}
+        {%- endfor %}
+    {%- endfor %}
+    {%- endif %}
+
